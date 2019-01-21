@@ -1,6 +1,7 @@
 package com.waylau.spring.boot.blog.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -21,7 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private static final String KEY = "waylau.com";
-	
+
+	@Qualifier("userServiceImpl")
 	@Autowired
 	private UserDetailsService userDetailsService;
 
@@ -60,8 +62,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	/**
 	 * 认证信息管理
-	 * @param auth
-	 * @throws Exception
 	 */
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
