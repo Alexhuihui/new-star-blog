@@ -258,6 +258,7 @@ public class UserspaceController {
 
         model.addAttribute("blog", blogService.getBlogById(id));
         model.addAttribute("catalogs", catalogs);
+        model.addAttribute("fileServerUrl", fileServerUrl);// 文件服务器的地址返回给客户端
         return new ModelAndView("/userspace/blogedit", "blogModel", model);
     }
 
