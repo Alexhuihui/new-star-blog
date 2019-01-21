@@ -33,9 +33,6 @@ import com.waylau.spring.boot.blog.vo.Response;
 
 /**
  * 用户控制器.
- * 
- * @author <a href="https://waylau.com">Way Lau</a>
- * @date 2017年2月26日
  */
 @RestController
 @RequestMapping("/users")
@@ -70,8 +67,6 @@ public class UserController {
 
 	/**
 	 * 获取 form 表单页面
-	 * @param user
-	 * @return
 	 */
 	@GetMapping("/add")
 	public ModelAndView createForm(Model model) {
@@ -81,10 +76,6 @@ public class UserController {
 
 	/**
 	 * 新建用户
-	 * @param user
-	 * @param result
-	 * @param redirect
-	 * @return
 	 */
 	@PostMapping
 	public ResponseEntity<Response> create(User user, Long authorityId) {
@@ -119,8 +110,6 @@ public class UserController {
 
 	/**
 	 * 删除用户
-	 * @param id
-	 * @return
 	 */
 	@DeleteMapping(value = "/{id}")
     public ResponseEntity<Response> delete(@PathVariable("id") Long id, Model model) {
@@ -134,8 +123,6 @@ public class UserController {
 	
 	/**
 	 * 获取修改用户的界面，及数据
-	 * @param user
-	 * @return
 	 */
 	@GetMapping(value = "edit/{id}")
 	public ModelAndView modifyForm(@PathVariable("id") Long id, Model model) {

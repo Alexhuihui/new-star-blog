@@ -16,9 +16,6 @@ import com.waylau.spring.boot.blog.service.UserService;
 
 /**
  * 主页控制器.
- * 
- * @since 1.0.0 2017年3月8日
- * @author <a href="https://waylau.com">Way Lau</a> 
  */
 @Controller
 public class MainController {
@@ -43,7 +40,6 @@ public class MainController {
 
 	/**
 	 * 获取登录界面
-	 * @return
 	 */
 	@GetMapping("/login")
 	public String login() {
@@ -64,10 +60,6 @@ public class MainController {
 	
 	/**
 	 * 注册用户
-	 * @param user
-	 * @param result
-	 * @param redirect
-	 * @return
 	 */
 	@PostMapping("/register")
 	public String registerUser(User user) {
