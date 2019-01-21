@@ -68,7 +68,7 @@ public class BlogServiceImpl implements BlogService {
 	 */
 	@Override
 	public Blog getBlogById(Long id) {
-		return blogRepository.findOne(id);
+		return blogRepository.getOne(id);
 	}
 
 	@Override
@@ -97,14 +97,14 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public void readingIncrease(Long id) {
-		Blog blog = blogRepository.findOne(id);
+		Blog blog = blogRepository.getOne(id);
 		blog.setReadSize(blog.getCommentSize()+1);
 		this.saveBlog(blog);
 	}
 
 	@Override
 	public Blog createComment(Long blogId, String commentContent) {
-		Blog originalBlog = blogRepository.findOne(blogId);
+		Blog originalBlog = blogRepository.getOne(blogId);
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
 		Comment comment = new Comment(user, commentContent);
 		originalBlog.addComment(comment);
@@ -113,14 +113,14 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public void removeComment(Long blogId, Long commentId) {
-		Blog originalBlog = blogRepository.findOne(blogId);
+		Blog originalBlog = blogRepository.getOne(blogId);
 		originalBlog.removeComment(commentId);
 		this.saveBlog(originalBlog);
 	}
 
 	@Override
 	public Blog createVote(Long blogId) {
-		Blog originalBlog = blogRepository.findOne(blogId);
+		Blog originalBlog = blogRepository.getOne(blogId);
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
 		Vote vote = new Vote(user);
 		boolean isExist = originalBlog.addVote(vote);
@@ -132,7 +132,7 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public void removeVote(Long blogId, Long voteId) {
-		Blog originalBlog = blogRepository.findOne(blogId);
+		Blog originalBlog = blogRepository.getOne(blogId);
 		originalBlog.removeVote(voteId);
 		this.saveBlog(originalBlog);
 	}
