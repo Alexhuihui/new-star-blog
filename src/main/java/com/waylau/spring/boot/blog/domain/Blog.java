@@ -181,7 +181,6 @@ public class Blog implements Serializable {
  
 	/**
 	 * 添加评论
-	 * @param comment
 	 */
 	public void addComment(Comment comment) {
 		this.comments.add(comment);
@@ -189,7 +188,6 @@ public class Blog implements Serializable {
 	}
 	/**
 	 * 删除评论
-	 * @param comment
 	 */
 	public void removeComment(Long commentId) {
 		for (int index=0; index < this.comments.size(); index ++ ) {
@@ -204,8 +202,6 @@ public class Blog implements Serializable {
  
 	/**
 	 * 点赞
-	 * @param vote
-	 * @return
 	 */
 	public boolean addVote(Vote vote) {
 		boolean isExist = false;

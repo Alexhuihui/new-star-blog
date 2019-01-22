@@ -27,9 +27,6 @@ public class BlogServiceImpl implements BlogService {
     @Autowired
     private EsBlogService esBlogService;
 
-    /* (non-Javadoc)
-     * @see com.waylau.spring.boot.blog.service.BlogService#saveBlog(com.waylau.spring.boot.blog.domain.Blog)
-     */
     @Transactional
     @Override
     public Blog saveBlog(Blog blog) {
@@ -49,9 +46,6 @@ public class BlogServiceImpl implements BlogService {
         return returnBlog;
     }
 
-    /* (non-Javadoc)
-     * @see com.waylau.spring.boot.blog.service.BlogService#removeBlog(java.lang.Long)
-     */
     @Transactional
     @Override
     public void removeBlog(Long id) {
@@ -60,9 +54,6 @@ public class BlogServiceImpl implements BlogService {
         esBlogService.removeEsBlog(esblog.getId());
     }
 
-    /* (non-Javadoc)
-     * @see com.waylau.spring.boot.blog.service.BlogService#getBlogById(java.lang.Long)
-     */
     @Override
     public Blog getBlogById(Long id) {
         return blogRepository.getOne(id);
