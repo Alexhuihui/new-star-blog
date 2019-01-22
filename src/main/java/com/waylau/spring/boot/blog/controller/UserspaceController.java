@@ -152,15 +152,15 @@ public class UserspaceController {
 
         if (catalogId != null && catalogId > 0) { // 分类查询
             Catalog catalog = catalogService.getCatalogById(catalogId);
-            Pageable pageable = new PageRequest(pageIndex, pageSize);
+            Pageable pageable = PageRequest.of(pageIndex, pageSize);
             page = blogService.listBlogsByCatalog(catalog, pageable);
             order = "";
         } else if (order.equals("hot")) { // 最热查询
             Sort sort = new Sort(Direction.DESC, "readSize", "commentSize", "voteSize");
-            Pageable pageable = new PageRequest(pageIndex, pageSize, sort);
+            Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
             page = blogService.listBlogsByTitleVoteAndSort(user, keyword, pageable);
         } else if (order.equals("new")) { // 最新查询
-            Pageable pageable = new PageRequest(pageIndex, pageSize);
+            Pageable pageable = PageRequest.of(pageIndex, pageSize);
             page = blogService.listBlogsByTitleVote(user, keyword, pageable);
         }
 
