@@ -94,7 +94,7 @@ public class EsBlogServiceImpl implements EsBlogService {
      */
     @Override
     public List<EsBlog> listTop5NewestEsBlogs() {
-        Page<EsBlog> page = this.listHotestEsBlogs(EMPTY_KEYWORD, TOP_5_PAGEABLE);
+        Page<EsBlog> page = this.listNewestEsBlogs(EMPTY_KEYWORD, TOP_5_PAGEABLE);
         return page.getContent();
     }
 
@@ -112,34 +112,27 @@ public class EsBlogServiceImpl implements EsBlogService {
 
         List<TagVO> list = new ArrayList<>();
 
-        // 查询条件
-        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
-                .withSearchType(SearchType.QUERY_THEN_FETCH).withIndices("blog").withTypes("blog")
-                .addAggregation(terms("tags").field("tags")
-                        .order(Terms..count(false)).size(30)).build();
-
-        // 聚合
-        Aggregations aggregations = elasticsearchTemplate.query(searchQuery,
-                new ResultsExtractor<Aggregations>() {
-                    @Override
-                    public Aggregations extract(SearchResponse response) {
-                        return response.getAggregations();
-                    }
-                });
-
-        StringTerms modelTerms = (StringTerms) aggregations.asMap().get("tags");
-        // 升级到 Spring Boot 2.0.1 之后，使用新的方法
-//		Iterator<Bucket> modelBucketIt = modelTerms.getBuckets().iterator();
-//		while (modelBucketIt.hasNext()) {
-//			Bucket actiontypeBucket = modelBucketIt.next();
+//        // 查询条件
+//        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+//                .withSearchType(SearchType.QUERY_THEN_FETCH).withIndices("blog").withTypes("blog")
+//                .addAggregation(terms("tags").field("tags")
+//                        .order(Terms..count(false)).size(30)).build();
 //
-//			list.add(new TagVO(actiontypeBucket.getKey().toString(), actiontypeBucket.getDocCount()));
-//		}
-
-        List<StringTerms.Bucket> modelBucketIt = modelTerms.getBuckets();
-        for (StringTerms.Bucket actiontypeBucket : modelBucketIt) {
-            list.add(new TagVO(actiontypeBucket.getKeyAsString(), actiontypeBucket.getDocCount()));
-        }
+//        // 聚合
+//        Aggregations aggregations = elasticsearchTemplate.query(searchQuery,
+//                new ResultsExtractor<Aggregations>() {
+//                    @Override
+//                    public Aggregations extract(SearchResponse response) {
+//                        return response.getAggregations();
+//                    }
+//                });
+//
+//        StringTerms modelTerms = (StringTerms) aggregations.asMap().get("tags");
+//
+//        List<StringTerms.Bucket> modelBucketIt = modelTerms.getBuckets();
+//        for (StringTerms.Bucket actiontypeBucket : modelBucketIt) {
+//            list.add(new TagVO(actiontypeBucket.getKeyAsString(), actiontypeBucket.getDocCount()));
+//        }
 
         return list;
     }
@@ -147,52 +140,52 @@ public class EsBlogServiceImpl implements EsBlogService {
     @Override
     public List<User> listTop12Users() {
 
-        List<String> usernamelist = new ArrayList<>();// 存储排序后的用户账号
-
-        // 查询条件
-        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
-                .withSearchType(SearchType.QUERY_THEN_FETCH).withIndices("blog").withTypes("blog")
-                .addAggregation(terms("users").field("username")
-                        .order(Terms.Order.count(false)).size(12)).build();
-        // 聚合
-        Aggregations aggregations = elasticsearchTemplate.query(searchQuery,
-                new ResultsExtractor<Aggregations>() {
-                    @Override
-                    public Aggregations extract(SearchResponse response) {
-                        return response.getAggregations();
-                    }
-                });
-
-        StringTerms modelTerms = (StringTerms) aggregations.asMap().get("users");
-
-        // 升级到 Spring Boot 2.0.1 之后，使用新的方法
-//		Iterator<Bucket> modelBucketIt = modelTerms.getBuckets().iterator();
-//		while (modelBucketIt.hasNext()) {
-//			Bucket actiontypeBucket = modelBucketIt.next();
-//			String username = actiontypeBucket.getKey().toString();
-//			usernamelist.add(username);
-//		}
-
-        List<StringTerms.Bucket> modelBucketIt = modelTerms.getBuckets();
-        for (StringTerms.Bucket actiontypeBucket : modelBucketIt) {
-            String username = actiontypeBucket.getKeyAsString();
-            usernamelist.add(username);
-        }
-
-        // 根据用户名，查出用户的详细信息
-        List<User> list = userService.listUsersByUsernames(usernamelist);
+//        List<String> usernamelist = new ArrayList<>();// 存储排序后的用户账号
+//
+//        // 查询条件
+//        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+//                .withSearchType(SearchType.QUERY_THEN_FETCH).withIndices("blog").withTypes("blog")
+//                .addAggregation(terms("users").field("username")
+//                        .order(Terms.Order.count(false)).size(12)).build();
+//        // 聚合
+//        Aggregations aggregations = elasticsearchTemplate.query(searchQuery,
+//                new ResultsExtractor<Aggregations>() {
+//                    @Override
+//                    public Aggregations extract(SearchResponse response) {
+//                        return response.getAggregations();
+//                    }
+//                });
+//
+//        StringTerms modelTerms = (StringTerms) aggregations.asMap().get("users");
+//
+//        // 升级到 Spring Boot 2.0.1 之后，使用新的方法
+////		Iterator<Bucket> modelBucketIt = modelTerms.getBuckets().iterator();
+////		while (modelBucketIt.hasNext()) {
+////			Bucket actiontypeBucket = modelBucketIt.next();
+////			String username = actiontypeBucket.getKey().toString();
+////			usernamelist.add(username);
+////		}
+//
+//        List<StringTerms.Bucket> modelBucketIt = modelTerms.getBuckets();
+//        for (StringTerms.Bucket actiontypeBucket : modelBucketIt) {
+//            String username = actiontypeBucket.getKeyAsString();
+//            usernamelist.add(username);
+//        }
+//
+//        // 根据用户名，查出用户的详细信息
+//        List<User> list = userService.listUsersByUsernames(usernamelist);
 
         // 按照 usernamelist 的顺序返回用户对象
         List<User> returnList = new ArrayList<>();
 
-        for (String username : usernamelist) {
-            for (User user : list) {
-                if (username.equals(user.getUsername())) {
-                    returnList.add(user);
-                    break;
-                }
-            }
-        }
+//        for (String username : usernamelist) {
+//            for (User user : list) {
+//                if (username.equals(user.getUsername())) {
+//                    returnList.add(user);
+//                    break;
+//                }
+//            }
+//        }
 
         return returnList;
     }
